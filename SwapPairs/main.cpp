@@ -11,19 +11,18 @@ struct ListNode {
 
 class Solution {
 public:
-    ListNode* removeNthFromEnd(ListNode* head, int n) {
+    ListNode *swapPairs(ListNode *head) {
         auto* virtualHead = new ListNode(0, head);
-        auto fast = virtualHead;
-        auto slow = virtualHead;
-        ++n;
-        while (n-- && fast) fast = fast->next;
-        while (fast) {
-            fast = fast->next;
-            slow = slow->next;
+        auto* movingPtr = virtualHead;
+        while (movingPtr->next && movingPtr->next->next) {
+            ListNode* firstNode = movingPtr->next;
+            ListNode* secondNode = movingPtr->next->next;
+            ListNode* thirdNode = movingPtr->next->next->next;
+            movingPtr->next = secondNode;
+            secondNode->next = firstNode;
+            firstNode->next = thirdNode;
+            movingPtr = firstNode;
         }
-        auto temp = slow->next;
-        slow->next = slow->next->next;
-        delete temp;
         return virtualHead->next;
     }
 };
@@ -56,23 +55,19 @@ int main() {
     std::cout << "Hello, World!" << std::endl;
 
     Solution s;
-    std::vector<int> nums_1{1, 2, 3, 4, 5};
+    std::vector<int> nums_1{1, 2, 3, 4};
     ListNode* head_1 = create(nums_1);
-    ListNode* res_1 = s.removeNthFromEnd(head_1, 2);
+    ListNode* res_1 = s.swapPairs(head_1);
     printList(res_1);
 
-    std::vector<int> nums_2{1};
+    std::vector<int> nums_2{};
     ListNode* head_2 = create(nums_2);
-    ListNode* res_2 = s.removeNthFromEnd(head_2, 1);
+    ListNode* res_2 = s.swapPairs(head_2);
     printList(res_2);
 
-
-
-
-
-    std::vector<int> nums_3{1, 2};
+    std::vector<int> nums_3{1};
     ListNode* head_3 = create(nums_3);
-    ListNode* res_3 = s.removeNthFromEnd(head_3, 1);
+    ListNode* res_3 = s.swapPairs(head_3);
     printList(res_3);
 
     return 0;
